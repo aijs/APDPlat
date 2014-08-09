@@ -22,7 +22,7 @@ package org.apdplat.module.system.action;
 
 import org.apdplat.module.system.model.BackupScheduleConfig;
 import org.apdplat.module.system.service.backup.BackupSchedulerService;
-import org.apdplat.module.system.service.backup.BackupService;
+import org.apdplat.module.system.service.backup.AbstractBackupService;
 import org.apdplat.platform.action.DefaultAction;
 import org.apdplat.platform.log.APDPlatLogger;
 import org.apdplat.platform.util.FileUtils;
@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import org.apache.struts2.convention.annotation.Namespace;
+import org.apdplat.module.system.service.backup.BackupService;
+import org.apdplat.platform.log.APDPlatLoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -42,7 +44,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Namespace("/system")
 public class BackupAction extends DefaultAction {
-    private static final APDPlatLogger LOG = new APDPlatLogger(BackupAction.class);
+    private static final APDPlatLogger LOG = APDPlatLoggerFactory.getAPDPlatLogger(BackupAction.class);
     
     private String date;
     @Resource(name="backupServiceExecuter")
@@ -89,7 +91,7 @@ public class BackupAction extends DefaultAction {
         return null;
     }
     public String store(){
-        List<String> existBackup=backupService.getExistBackup();
+        List<String> existBackup=backupService.getExistBackupFileNames();
         List<Map<String,String>> data=new ArrayList<>();
         for(String item : existBackup){
             Map<String,String> map=new HashMap<>();
@@ -122,7 +124,7 @@ public class BackupAction extends DefaultAction {
         
         outputFile=new File(outputFile, date+".zip");
         //获取备份文件
-        String backupFile=BackupService.getPath()+date+".bak";
+        String backupFile=backupService.getBackupFilePath()+date+".bak";
         //生成一个临时压缩文件
         ZipUtils.createZip(backupFile, outputFile.getAbsolutePath());
             

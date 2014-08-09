@@ -86,7 +86,7 @@ public class IndexLog extends Model {
     @SearchableProperty(index=Index.NOT_ANALYZED)
     @ModelAttr("用户名")
     protected String username;    
-
+    
     public String getUsername() {
         return username;
     }

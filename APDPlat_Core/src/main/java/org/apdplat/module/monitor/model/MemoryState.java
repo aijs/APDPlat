@@ -74,7 +74,7 @@ public class MemoryState extends Model {
     
     @ModelAttr("可用内存")
     protected Float usableMemory;
-
+    
     public String getAppName() {
         return appName;
     }
